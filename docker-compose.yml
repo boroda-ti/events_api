@@ -1,0 +1,49 @@
+services:
+  web:
+    build: .
+    container_name: jointoit_app
+    command: uv run python project/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./project:/app/project
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15
+    container_name: jointoit_db
+    restart: always
+    volumes:
+      - postgres_data:/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  redis:
+    image: redis:7.2.5-alpine
+    hostname: redis
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    container_name: jointoit_celery
+    working_dir: /app/project
+    command: celery -A project worker --loglevel=info
+    volumes:
+      - ./project:/app/project
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+
+volumes:
+  postgres_data:
