@@ -17,6 +17,21 @@
   - Event approval
   - Event deletion
 
+## MVP Vision
+To scale moderation and reduce manual workload for admins, an **AI-based approval system** could be introduced:
+- **Content validation**
+  - Automatically reject events containing offensive words or suspicious links
+  - Prevent HTML/script injections
+
+- **Spam and Safety Filtering**
+  - Use a lightweight AI model or 3rd-party API to detect
+    - Spam phrases
+    - Blacklisted domains
+    - Repetitive/unusual text patterns
+
+- **Optional Manual Review**
+  - Flag events for admin review (instead of full auto-approval)
+
 ## Tech Stack
 - Python 3.12
 - Django 5
